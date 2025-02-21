@@ -257,7 +257,7 @@ impl<'extensions> MoveVM<'extensions> {
                     "Failed to resolve external type tag{tag}{}",
                     err.message()
                         .map(|s| format!(": {}", s))
-                        .unwrap_or_else(|| "".to_string())
+                        .unwrap_or_default()
                 ))
                 .finish(Location::Undefined)
         } else {
