@@ -3,11 +3,29 @@ source: crates/move-package/tests/test_runner.rs
 ---
 ResolvedGraph {
     graph: DependencyGraph {
-        root_path: "tests/test_sources/implicits/simple",
+        root_path: "tests/test_sources/implicits/transitive",
         root_package_id: "A",
         root_package_name: "A",
         package_graph: {
             "A": [
+                (
+                    "B",
+                    Outgoing,
+                ),
+                (
+                    "I1",
+                    Outgoing,
+                ),
+                (
+                    "I2",
+                    Outgoing,
+                ),
+            ],
+            "B": [
+                (
+                    "A",
+                    Incoming,
+                ),
                 (
                     "I1",
                     Outgoing,
@@ -19,6 +37,10 @@ ResolvedGraph {
             ],
             "I1": [
                 (
+                    "B",
+                    Incoming,
+                ),
+                (
                     "A",
                     Incoming,
                 ),
@@ -28,6 +50,10 @@ ResolvedGraph {
                 ),
             ],
             "I2": [
+                (
+                    "B",
+                    Incoming,
+                ),
                 (
                     "I1",
                     Incoming,
@@ -39,6 +65,13 @@ ResolvedGraph {
             ],
         },
         package_table: {
+            "B": Package {
+                kind: Local(
+                    "../b",
+                ),
+                version: None,
+                resolver: None,
+            },
             "I1": Package {
                 kind: Local(
                     "../i1",
@@ -56,11 +89,12 @@ ResolvedGraph {
         },
         always_deps: {
             "A",
+            "B",
             "I1",
             "I2",
         },
-        manifest_digest: "12C8A08C8AB11EDB29B745BDB82BC7FD01DC0E7EFD7D2741795B2998861B7937",
-        deps_digest: "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600",
+        manifest_digest: "1031E7A4E46F6AFC882F4B65CE753A26F8099BE0C3ACD9CDA30FB1B3ABA1A240",
+        deps_digest: "060AD7E57DFB13104F21BE5F5C3759D03F0553FC3229247D9A7A6B45F50D03A3",
     },
     build_options: BuildConfig {
         dev_mode: true,
@@ -115,6 +149,45 @@ ResolvedGraph {
             source_package: SourceManifest {
                 package: PackageInfo {
                     name: "A",
+                    authors: [],
+                    license: None,
+                    edition: Some(
+                        Edition {
+                            edition: "2024",
+                            release: Some(
+                                "beta",
+                            ),
+                        },
+                    ),
+                    flavor: None,
+                    custom_properties: {},
+                },
+                addresses: None,
+                dev_address_assignments: None,
+                build: None,
+                dependencies: {
+                    "B": Internal(
+                        InternalDependency {
+                            kind: Local(
+                                "../b",
+                            ),
+                            subst: None,
+                            digest: None,
+                            dep_override: false,
+                        },
+                    ),
+                },
+                dev_dependencies: {},
+            },
+            package_path: "ELIDED_FOR_TEST",
+            renaming: {},
+            resolved_table: {},
+            source_digest: "ELIDED_FOR_TEST",
+        },
+        "B": Package {
+            source_package: SourceManifest {
+                package: PackageInfo {
+                    name: "B",
                     authors: [],
                     license: None,
                     edition: Some(

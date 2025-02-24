@@ -147,9 +147,9 @@ a ─→ b ──→ i1
 
 ```
 a:
-  B: b
+  C: c
 
-b:
+c:
   I1: i1a
 
 i1a: no deps
