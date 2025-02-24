@@ -8,7 +8,6 @@ description: tests/shell_tests/new_tests/new_then_test.sh
 
 # check that sui move new followed by sui move test succeeds
 sui move new example
-
 cd example && sui move test
 
 ----- results -----
