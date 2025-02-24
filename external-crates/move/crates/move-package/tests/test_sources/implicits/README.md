@@ -157,11 +157,11 @@ i1a: no deps
 
 Expected:
  - implicits added for `a`
- - no implicits added for `b`, but `i1a` is replaced with `i1` because of implicit override in `a`
- - note difference between situation when `b` has no deps: no dep from `b` to `i2`
+ - no implicits added for `c`, but `i1a` is replaced with `i1` because of implicit override in `a`
+ - note difference between situation when `c` has no deps: no dep from `c` to `i2`
 
 ```
-a ───→ b
+a ───→ c
 │└────┼┐
 │┌────┘│
 ↓↓     ↓
@@ -172,21 +172,21 @@ i1 ──→ i2
 
 ```
 a:
-  B: b
+  D: d
 
-b:
-  I1: i1a
+d:
+  I2: i2a
 
-i1a: no deps
+i2a: no deps
 ```
 
 Expected:
  - implicits added for `a`
- - no implicits added for `b`, but `i1a` is replaced with `i1` because of implicit override in `a`
- - note difference between situation when `b` has no deps: no dep from `b` to `i2`
+ - no implicits added for `d`, but `i2a` is replaced with `i2` because of implicit override in `a`
+ - note difference between situation when `d` has no deps: no dep from `d` to `i1`
 
 ```
-a ───→ b
+a ───→ d
 │└────┐│
 │     ││
 ↓     ↓↓
