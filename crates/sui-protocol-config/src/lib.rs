@@ -622,6 +622,11 @@ struct FeatureFlags {
     // If true, enable zstd compression for consensus tonic network.
     #[serde(skip_serializing_if = "is_false")]
     consensus_zstd_compression: bool,
+
+    // If true, then it (1) will not enforce monotonicity checks for a block's ancestors and (2) calculates the commit's timestamp based on the 
+    // median timestamp of the leader's ancestors.
+    #[serde(skip_serializing_if = "is_false")]
+    consensus_median_based_timestamp: bool,
 }
 
 fn is_false(b: &bool) -> bool {
@@ -1783,6 +1788,15 @@ impl ProtocolConfig {
         assert!(
             !res || self.gc_depth() > 0,
             "The consensus linearize sub dag V2 requires GC to be enabled"
+        );
+        res
+    }
+
+    pub fn consensus_median_based_timestamp(&self) -> bool {
+        let res = self.feature_flags.consensus_median_based_timestamp;
+        assert!(
+            !res || self.gc_depth() > 0,
+            "The consensus median based timestamp requires GC to be enabled"
         );
         res
     }
@@ -3425,6 +3439,10 @@ impl ProtocolConfig {
 
     pub fn set_mysticeti_fastpath_for_testing(&mut self, val: bool) {
         self.feature_flags.mysticeti_fastpath = val;
+    }
+
+    pub fn set_consensus_median_based_timestamp(&mut self, val: bool) {
+        self.feature_flags.consensus_median_based_timestamp = val;
     }
 }
 
