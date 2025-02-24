@@ -95,7 +95,7 @@ ResolvedGraph {
                     ),
                     subst: None,
                     digest: None,
-                    dep_override: false,
+                    dep_override: true,
                 },
             ),
             "I2": Internal(
@@ -105,7 +105,7 @@ ResolvedGraph {
                     ),
                     subst: None,
                     digest: None,
-                    dep_override: false,
+                    dep_override: true,
                 },
             ),
         },
