@@ -65,16 +65,16 @@ i1 ──→ i2
 
 ```
 a:
-  I2 = i2'
+  I2 = i2a
 
-i2': no deps
+i2a: no deps
 ```
 
 Expected: `a` should not have any implicit deps because any explicits should
 turn off implicits
 
 ```
-a ─→ i2'
+a ─→ i2a
 ```
 
 ### Override in root 1 #############################################################################
@@ -82,21 +82,21 @@ a ─→ i2'
 ```
 a:
   B: b
-  I1: i1'
+  I1: i1a
 
 b: no deps
-i1': no deps
+i1a: no deps
 ```
 
 Expected:
  - no implcits for `a` (because of explicit),
- - nor for `i1'` or `i2` (because they are system packages)
- - implicits added for `b`, but `i1` is overridden to `i1'` (because of override in `a`)
+ - nor for `i1a` or `i2` (because they are system packages)
+ - implicits added for `b`, but `i1` is overridden to `i1a` (because of override in `a`)
 
 ```
 a ─→ b ─→ i2
 │    ↓
-└──→ i1'
+└──→ i1a
 ```
 
 ### Override in root 1 error #######################################################################
@@ -104,21 +104,21 @@ a ─→ b ─→ i2
 ```
 a:
   B: b
-  I1: i1'
+  I1: i1b
 
 b: no deps
 
-i1':
-  I2: i2'
+i1b:
+  I2: i2a
 ```
 
 Expected:
- - Error because `i1'` and `b` have incompatible deps on `i2`
+ - Error because `i1b` and `b` have incompatible deps on `i2`
 
 ```
 a ─→ b ───→ i2  ┐
 │    ↓          ≠ error!
-└──→ i1' ─→ i2' ┘
+└──→ i1b ─→ i2a ┘
 ```
 
 ### Override in root 2 #############################################################################
@@ -126,21 +126,21 @@ a ─→ b ───→ i2  ┐
 ```
 a:
   B: b
-  I2: i2'
+  I2: i2a
 
 b: no deps
-i1': no deps
+i2a: no deps
 ```
 
 Expected:
  - no implicits for `a`
  - implicits added for `b`
- - `i2` is overridden to `i2'` in both `b` and `i1` (because of override in `a`)
+ - `i2` is overridden to `i2a` in both `b` and `i1` (because of override in `a`)
 
 ```
 a ─→ b ──→ i1
 │    ↓     │
-└──→ i2' ←─┘
+└──→ i2a ←─┘
 ```
 
 ### Override in dep 1 ##############################################################################
@@ -150,14 +150,14 @@ a:
   B: b
 
 b:
-  I1: i1'
+  I1: i1a
 
-i1': no deps
+i1a: no deps
 ```
 
 Expected:
  - implicits added for `a`
- - no implicits added for `b`, but `i1'` is replaced with `i1` because of implicit override in `a`
+ - no implicits added for `b`, but `i1a` is replaced with `i1` because of implicit override in `a`
  - note difference between situation when `b` has no deps: no dep from `b` to `i2`
 
 ```
@@ -175,14 +175,14 @@ a:
   B: b
 
 b:
-  I1: i1'
+  I1: i1a
 
-i1': no deps
+i1a: no deps
 ```
 
 Expected:
  - implicits added for `a`
- - no implicits added for `b`, but `i1'` is replaced with `i1` because of implicit override in `a`
+ - no implicits added for `b`, but `i1a` is replaced with `i1` because of implicit override in `a`
  - note difference between situation when `b` has no deps: no dep from `b` to `i2`
 
 ```
