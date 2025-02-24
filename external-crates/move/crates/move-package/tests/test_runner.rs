@@ -8,7 +8,10 @@ use move_package::{
     compilation::{build_plan::BuildPlan, compiled_package::CompiledPackageInfo},
     package_hooks::{self, PackageHooks, PackageIdentifier},
     resolution::resolution_graph::Package,
-    source_package::parsed_manifest::{Dependencies, OnChainInfo, PackageDigest, SourceManifest},
+    source_package::{
+        manifest_parser::parse_dependencies,
+        parsed_manifest::{Dependencies, OnChainInfo, PackageDigest, SourceManifest},
+    },
     BuildConfig,
 };
 use move_symbol_pool::Symbol;
@@ -74,7 +77,7 @@ impl Test<'_> {
     fn output(&self) -> anyhow::Result<String> {
         let out_path = self.output_dir.path().to_path_buf();
         let lock_path = out_path.join("Move.lock");
-        let implicits_path = self.toml_path.with_extension(".implicits");
+        let implicits_path = self.toml_path.with_extension("implicits");
 
         let config = BuildConfig {
             dev_mode: true,
@@ -130,8 +133,9 @@ impl Test<'_> {
 fn load_implicits(path: &Path) -> Dependencies {
     let deps_toml = fs::read_to_string(path).unwrap_or("# no implicit deps".to_string());
 
-    toml::from_str(&deps_toml)
-        .unwrap_or_else(|_| panic!("{path:?} contains a TOML-formatted set of dependencies"))
+    parse_dependencies(toml::from_str(&deps_toml).unwrap()).unwrap_or_else(|e| {
+        panic!("expected {path:?} to contain a toml-formatted dependencies section\n{e:?}")
+    })
 }
 
 fn scrub_build_config(config: &mut BuildConfig) {
